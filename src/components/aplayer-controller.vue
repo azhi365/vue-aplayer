@@ -21,12 +21,12 @@
         @togglemute="$emit('togglemute')"
         @setvolume="v => $emit('setvolume', v)"
       />
-      <icon-button
+<!--      <icon-button
         class="aplayer-icon-mode"
         icon="shuffle"
         :class="{ 'inactive': !shuffle }"
         @click.native="$emit('toggleshuffle')"
-      />
+      />-->
       <icon-button
         class="aplayer-icon-mode"
         :icon="repeat === 'repeat-one' ? 'repeat-one' : 'repeat-all'"
@@ -39,6 +39,12 @@
         :class="{ 'inactive': !$parent.showList }"
         @click.native="$emit('togglelist')"
       />
+      <icon-button
+        @click.native="sendSpeed"
+        style="width: 25px"
+      >
+        <span ref="speedVal" slot="text" >1.0x</span>
+      </icon-button>
     </div>
   </div>
 </template>
@@ -65,7 +71,22 @@
         return this.stat.playedTime / this.stat.duration
       },
     },
+    mounted () {
+      this.init()
+    },
     methods: {
+      init () {
+        try {
+          var rate = window.localStorage.getItem('audioPlaybackRate');
+          if(!rate || rate === "null"){
+            rate = this.$parent.playbackRate
+          }
+        } catch (e) {
+          rate = this.$parent.playbackRate;
+          console.log(e)
+        }
+        this.$refs.speedVal.innerHTML = rate.toFixed(2) + 'x'
+      },
       secondToTime (second) {
         if (isNaN(second)) {
           return '00:00'
@@ -80,6 +101,18 @@
         const minAdjust = Math.trunc((second / 60) - (60 * Math.trunc((second / 60) / 60)))
         return second >= 3600 ? pad0(hours) + ':' + pad0(minAdjust) + ':' + pad0(sec) : pad0(min) + ':' + pad0(sec)
       },
+      sendSpeed () {
+        var rate = this.$refs.speedVal.innerHTML;
+        rate = rate.replace('x', '');
+        rate = parseFloat(rate);
+        if (rate >= 2) {
+          rate = 0.75;
+        } else {
+          rate = rate + 0.25;
+        }
+        this.$emit('setSpeed', rate)
+        this.$refs.speedVal.innerHTML = rate.toFixed(2) + 'x'
+      }
     },
   }
 </script>

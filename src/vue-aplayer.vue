@@ -26,7 +26,7 @@
           <span class="aplayer-author">{{ currentMusic.artist || 'Unknown' }}</span>
         </div>
         <slot name="display" :current-music="currentMusic" :play-stat="playStat">
-          <lyrics :current-music="currentMusic" :play-stat="playStat" v-if="showLrc" />
+          <lyrics :current-music="currentMusic" :play-stat="playStat" v-if="showLrc"/>
         </slot>
         <controls
           :shuffle="shouldShuffle"
@@ -43,6 +43,7 @@
           @dragend="onProgressDragEnd"
           @dragging="onProgressDragging"
           @nextmode="setNextMode"
+          @setSpeed="setSpeed"
         />
       </div>
     </div>
@@ -64,7 +65,7 @@
   import MusicList from './components/aplayer-list.vue'
   import Controls from './components/aplayer-controller.vue'
   import Lyrics from './components/aplayer-lrc.vue'
-  import { deprecatedProp, versionCompare, warn } from './utils'
+  import {deprecatedProp, versionCompare, warn} from './utils'
 
   let versionBadgePrinted = false
   const canUseSync = versionCompare(Vue.version, '2.3.0') >= 0
@@ -268,6 +269,7 @@
         internalRepeat: this.repeat,
         // for shuffling
         shuffledList: [],
+        playbackRate: 1.0
       }
     },
     computed: {
@@ -405,7 +407,7 @@
         this.floatOriginX = this.floatOffsetLeft
         this.floatOriginY = this.floatOffsetTop
       },
-      onDragAround ({ offsetLeft, offsetTop }) {
+      onDragAround ({offsetLeft, offsetTop}) {
         this.floatOffsetLeft = this.floatOriginX + offsetLeft
         this.floatOffsetTop = this.floatOriginY + offsetTop
       },
@@ -421,6 +423,20 @@
           this.repeatMode = REPEAT.REPEAT_ALL
         }
       },
+
+      setSpeed (rate) {
+        if(!rate){
+          rate = 1.0
+        }
+        this.audio.playbackRate = rate;
+        try {
+          window.localStorage.setItem('audioPlaybackRate', rate);
+        } catch (e) {
+          this.playbackRate = rate;
+          console.log(e);
+        }
+      },
+
       thenPlay () {
         this.$nextTick(() => {
           this.play()
@@ -453,6 +469,15 @@
             this.rejectPlayPromise = reject
             audioPlayPromise.then((res) => {
               this.rejectPlayPromise = null
+
+              try {
+                var rate = window.localStorage.getItem('audioPlaybackRate');
+              } catch (e) {
+                rate = this.playbackRate;
+                console.log(e)
+              }
+              this.setSpeed(rate)
+
               resolve(res)
             }).catch(warn)
           })

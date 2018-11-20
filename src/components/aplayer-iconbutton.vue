@@ -3,6 +3,7 @@
     type="button"
     class="aplayer-icon"
   >
+    <slot name="text"></slot>
     <icon :type="icon"/>
   </button>
 </template>
