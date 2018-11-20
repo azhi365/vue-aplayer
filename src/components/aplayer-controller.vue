@@ -21,12 +21,12 @@
         @togglemute="$emit('togglemute')"
         @setvolume="v => $emit('setvolume', v)"
       />
-<!--      <icon-button
-        class="aplayer-icon-mode"
-        icon="shuffle"
-        :class="{ 'inactive': !shuffle }"
-        @click.native="$emit('toggleshuffle')"
-      />-->
+      <!--      <icon-button
+              class="aplayer-icon-mode"
+              icon="shuffle"
+              :class="{ 'inactive': !shuffle }"
+              @click.native="$emit('toggleshuffle')"
+            />-->
       <icon-button
         class="aplayer-icon-mode"
         :icon="repeat === 'repeat-one' ? 'repeat-one' : 'repeat-all'"
@@ -43,7 +43,7 @@
         @click.native="sendSpeed"
         style="width: 25px"
       >
-        <span ref="speedVal" slot="text" >1.0x</span>
+        <span ref="speedVal" slot="text">1.0x</span>
       </icon-button>
     </div>
   </div>
@@ -76,15 +76,17 @@
     },
     methods: {
       init () {
+        var rate = 1.0;
         try {
-          var rate = window.localStorage.getItem('audioPlaybackRate');
-          if(!rate || rate === "null"){
+          rate = window.localStorage.getItem('audioPlaybackRate');
+          if (!rate || rate === "null") {
             rate = this.$parent.playbackRate
           }
         } catch (e) {
           rate = this.$parent.playbackRate;
           console.log(e)
         }
+        rate = parseFloat(rate);
         this.$refs.speedVal.innerHTML = rate.toFixed(2) + 'x'
       },
       secondToTime (second) {
@@ -110,7 +112,7 @@
         } else {
           rate = rate + 0.25;
         }
-        this.$emit('setSpeed', rate)
+        this.$emit('setSpeed', rate);
         this.$refs.speedVal.innerHTML = rate.toFixed(2) + 'x'
       }
     },
