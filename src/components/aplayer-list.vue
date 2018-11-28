@@ -51,7 +51,7 @@
       listHeightStyle () {
         return {
           height: `${33 * this.musicList.length - 1}px`,
-          maxHeight: this.listmaxheight || (((document.documentElement.clientHeight || document.body.clientHeight) - 140) + 'px')
+          maxHeight: this.listmaxheight || (((document.documentElement.clientHeight || document.body.clientHeight) - 160) + 'px')
         }
       }
     }
