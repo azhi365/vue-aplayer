@@ -108,7 +108,7 @@
       opacity: 0.8;
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.5);
       transition: all 0.1s ease;
 
       .aplayer-fill {

@@ -103,7 +103,7 @@
         type: Object,
         required: true,
         validator (song) {
-          return !song.src
+          return song.src
         },
       },
       list: {
@@ -474,7 +474,6 @@
                 var rate = window.localStorage.getItem('audioPlaybackRate');
               } catch (e) {
                 rate = this.playbackRate;
-                console.log(e)
               }
               this.setSpeed(rate)
 
@@ -549,6 +548,8 @@
         if (!this.list.length) {
           return [this.internalMusic]
         }
+        // fixme:: hacker
+        return this.list;
         let unshuffled = [...this.list]
         if (!this.internalShuffle || unshuffled.length <= 1) {
           return unshuffled
@@ -562,22 +563,24 @@
             return [this.internalMusic, unshuffled[0]]
           }
         }
+
+        // fixme:: hacker
         // shuffle list
         // @see https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
-        for (let i = unshuffled.length - 1; i > 0; i--) {
+       /* for (let i = unshuffled.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1))
           const tmp = unshuffled[i]
           unshuffled[i] = unshuffled[j]
           unshuffled[j] = tmp
-        }
+        }*/
 
         // take currentMusic to first
-        if (indexOfCurrentMusic !== -1) {
+/*        if (indexOfCurrentMusic !== -1) {
           indexOfCurrentMusic = unshuffled.indexOf(this.internalMusic)
           if (indexOfCurrentMusic !== 0) {
             [unshuffled[0], unshuffled[indexOfCurrentMusic]] = [unshuffled[indexOfCurrentMusic], unshuffled[0]]
           }
-        }
+        }*/
 
         return unshuffled
       },
@@ -810,7 +813,9 @@
       }
     },
     created () {
-      this.shuffledList = this.getShuffledList()
+      // fixme:: hacker
+      //this.shuffledList = this.getShuffledList()
+      console.log(this.shuffledList)
     },
     mounted () {
       this.initAudio()

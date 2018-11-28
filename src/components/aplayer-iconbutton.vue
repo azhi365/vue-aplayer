@@ -4,7 +4,7 @@
     class="aplayer-icon"
   >
     <slot name="text"></slot>
-    <icon :type="icon"/>
+    <icon :type="icon" v-if="icon"/>
   </button>
 </template>
 
@@ -22,8 +22,8 @@
 
 <style lang="scss">
   .aplayer-icon {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border: none;
     background-color: transparent;
     outline: none;

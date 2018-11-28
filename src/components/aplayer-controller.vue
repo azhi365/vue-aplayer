@@ -33,15 +33,15 @@
         :class="{ 'inactive': repeat === 'no-repeat'}"
         @click.native="$emit('nextmode')"
       />
-      <icon-button
+   <!--   <icon-button
         class="aplayer-icon-menu"
         icon="menu"
         :class="{ 'inactive': !$parent.showList }"
         @click.native="$emit('togglelist')"
-      />
+      />-->
       <icon-button
         @click.native="sendSpeed"
-        style="width: 25px"
+        style="width: 28px"
       >
         <span ref="speedVal" slot="text">1.0x</span>
       </icon-button>
@@ -144,6 +144,10 @@
         cursor: pointer;
         transition: all 0.2s ease;
         margin-left: 4px;
+        span{
+          vertical-align:middle;
+          font-size: 1.2em;
+        }
 
         &.inactive {
           opacity: .3;
